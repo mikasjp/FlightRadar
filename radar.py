@@ -7,6 +7,7 @@ Latitude = "52.0688114"
 Longitude = "19.4709897"
 
 # Range of your virtual radar in kilometers
+# Too high range may cause performance issues.
 Radius = "450"
 
 # ADS-B Data URL
