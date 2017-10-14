@@ -8,3 +8,7 @@ The script generates a KML file containing the marked airplanes in the selected 
 </p>
 
 You can preview Your map [here](http://kmlviewer.nsspot.net/)
+
+---
+##Dependences
+You need to install requests and simplekml modules.
