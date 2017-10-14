@@ -1,6 +1,9 @@
-# 
+# requests is a module that allows you to send HTTP requests
 import requests
+# json is for handling JSON files
 import json
+# simplekml is for generating KML files
+import simplekml
 
 # The geographic location of your virtual radar
 Latitude = "52.0688114"
@@ -22,3 +25,26 @@ RawFlightData = requests.get(URL, headers=Headers)
 # Parse downloaded JSON
 FlightData = json.loads(RawFlightData.content)
 
+# Now it's time to generate our map
+kml = simplekml.Kml()
+
+for airplane in FlightData["acList"]:
+    point = kml.newpoint()
+    point.coords = [(airplane["Long"],airplane["Lat"])]
+    point.name = str(airplane["Id"])
+    point.style.iconstyle.icon.href = "https://raw.githubusercontent.com/mikasjp/FlightRadar/master/airplane.png"
+    description = ""
+    if("Reg" in airplane):
+        description += "Registration number: "+str(airplane["Reg"])+"\n<br>"
+    if("Alt" in airplane):
+        description += "Altitude: "+str(airplane["Alt"])+" ft.\n<br>"
+    if("Spd" in airplane):
+        description += "Ground speed: "+str(airplane["Spd"])+" knots\n<br>"
+    if("Trak" in airplane):
+        description += "Heading: "+str(airplane["Trak"])+" &deg;\n<br>"
+        point.style.iconstyle.heading = airplane["Trak"]
+    
+    point.description = description
+    
+# Save our KML file
+kml.save("./radar.kml")
